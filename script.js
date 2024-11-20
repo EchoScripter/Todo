@@ -1,145 +1,130 @@
-/* Add a todo/ */
-
-// creating a empty array
+// creating an empty array for storing todos
 let demoarray = [];
 
-// function for rendering the todo items
+// Function for rendering todo items from the array
 function renderTodo(todo) {
   localStorage.setItem("demoarray", JSON.stringify(demoarray));
 
-  // select unorder list using class
   const list = document.querySelector(".todo-list");
   const item = document.querySelector(`[data-key='${todo.id}']`);
 
+  // If item is marked for deletion, remove it from the list
   if (todo.deleted) {
-    item.remove();
+    if (item) {
+      item.remove();
+    }
     return;
   }
 
-  // check if checked is true add done class effect otherwise as it is
   const isChecked = todo.checked ? "done" : "";
-  // create a new list
-  const newlist = document.createElement("li");
-  // set attribute to new list
-  newlist.setAttribute("class", `todo-item ${isChecked}`);
-  newlist.setAttribute("data-key", todo.id);
-  newlist.innerHTML = `
-<input id="${todo.id}"  type="checkbox"/>
-<label for "${todo.id}"  class="tick js-tick"></label>
-<span>${todo.x}</span>
-<button class="delete-todo js-delete-todo">
+
+  // Create a new list item for the todo
+  const newList = document.createElement("li");
+  newList.setAttribute("class", `todo-item ${isChecked}`);
+  newList.setAttribute("data-key", todo.id);
+  newList.innerHTML = `
+    <input id="checkbox-${todo.id}" type="checkbox" class="js-tick" ${todo.checked ? "checked" : ""}/>
+    <label for="checkbox-${todo.id}" class="tick js-tick"></label>
+    <span>${todo.x}</span>
     <button class="delete-todo js-delete-todo">
-        <svg fill="var(--svgcolor)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
         </svg>
     </button>
-`;
+  `;
 
+  // If item exists, replace it; else append new item
   if (item) {
-    list.replaceChild(newlist, item);
+    list.replaceChild(newList, item);
   } else {
-    list.append(newlist);
+    list.append(newList);
   }
-
-  /* // disabled this after fixing a selection bug
-                list.append(newlist); */
 }
 
-// function for adding a todo
+// Function for adding a new todo item
 function myFunction(x) {
-  // creating a object
-  const todoobject = {
+  const todoObject = {
     x,
     checked: false,
     id: Date.now(),
   };
 
-  // push new todo into a demoarray object
-  demoarray.push(todoobject);
+  // Add the new todo to the array
+  demoarray.push(todoObject);
 
-  renderTodo(todoobject);
-  console.log(demoarray);
-
-  /* disabled this because updated it show in list  */
-  /* // print demoarray in console
-                console.log(demoarray); */
+  renderTodo(todoObject);
 }
 
-function toggleDone(b) {
-  const index = demoarray.findIndex((myitem) => myitem.id === Number(b));
-  demoarray[index].checked = !demoarray[index].checked;
-  renderTodo(demoarray[index]);
+// Toggle the completion status of a todo
+function toggleDone(todoId) {
+  const index = demoarray.findIndex((todo) => todo.id === Number(todoId));
+  if (index !== -1) {
+    demoarray[index].checked = !demoarray[index].checked;
+    renderTodo(demoarray[index]);
+  }
 }
 
-function deleteTodo(c) {
-  const index = demoarray.findIndex((myitem) => myitem.id === Number(c));
-  const emptytodo = {
-    deleted: true,
-    ...demoarray[index],
-  };
-  demoarray = demoarray.filter((myitem) => myitem.id !== Number(c));
-  renderTodo(emptytodo);
+// Delete a todo item from the array
+function deleteTodo(todoId) {
+  const index = demoarray.findIndex((todo) => todo.id === Number(todoId));
+  if (index !== -1) {
+    const deletedTodo = {
+      deleted: true,
+      ...demoarray[index],
+    };
+    demoarray = demoarray.filter((todo) => todo.id !== Number(todoId));
+    renderTodo(deletedTodo);
+  }
 }
 
-// select form
+// Select form and add event listener for submitting new todos
 const form = document.querySelector(".formselect");
-
-// add a event listner submit on form
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-
-  // select input
   const input = document.querySelector(".inputselect");
-
-  // remove whitespace of input vlaue using trim method
   const text = input.value.trim();
 
-  // statement condition for printing a input value
   if (text !== "") {
-    // call a function for adding a new todo value
-    myFunction(text);
-    // after submit input value will be become blank ""
-    input.value = "";
+    myFunction(text); // Add new todo
+    input.value = ""; // Clear input field
   }
 });
 
-// select entire list
+// Select the entire list to handle dynamic actions (checkbox toggle and delete)
 const list = document.querySelector(".js-todo-list");
 list.addEventListener("click", (event) => {
+  const itemKey = event.target.closest("li")?.dataset.key;
+
   if (event.target.classList.contains("js-tick")) {
-    const itemKey = event.target.parentElement.dataset.key;
-    toggleDone(itemKey);
+    toggleDone(itemKey); // Toggle todo completion
   }
 
   if (event.target.classList.contains("js-delete-todo")) {
-    const itemKey = event.target.parentElement.dataset.key;
-    deleteTodo(itemKey);
+    deleteTodo(itemKey); // Delete todo
   }
 });
 
+// Load todos from localStorage when the page is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  const ref = localStorage.getItem("demoarray");
-  if (ref) {
-    demoarray = JSON.parse(ref);
-    demoarray.forEach((t) => {
-      renderTodo(t);
-    });
+  const savedTodos = localStorage.getItem("demoarray");
+  if (savedTodos) {
+    demoarray = JSON.parse(savedTodos);
+    demoarray.forEach((todo) => renderTodo(todo));
   }
 });
 
-const toggleSwitch = document.querySelector(
-  '.theme-switch input[type="checkbox"]'
-);
+// Theme Toggle (Light/Dark mode)
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const currentTheme = localStorage.getItem("theme");
 
 if (currentTheme) {
   document.documentElement.setAttribute("data-theme", currentTheme);
-
   if (currentTheme === "dark") {
     toggleSwitch.checked = true;
   }
 }
 
+// Switch theme based on checkbox
 function switchTheme(e) {
   if (e.target.checked) {
     document.documentElement.setAttribute("data-theme", "dark");
