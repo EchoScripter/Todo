@@ -5,69 +5,69 @@
     --toggleslider: #fff;
     --roundcolor: #fff;
     --svgcolor: #111;
-    }
-    
-    [data-theme="dark"] {
+}
+
+[data-theme="dark"] {
     --bg-color: #333333;
     --color: #e9dcdc;
     --togglebg: #333;
     --toggleslider: #e9dcdc;
     --roundcolor: #333;
     --svgcolor: #fff;
-    }
-    
-    *,
-    *::before,
-    *::after {
+}
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    }
-    
-    body {
+}
+
+body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     line-height: 1.4;
     background-color: var(--bg-color);
     transition: all 0.5s;
-    }
-    
-    /* toggle  */
-    
-    nav {
+}
+
+/* toggle */
+
+nav {
     display: flex;
     justify-content: flex-end;
     padding: 20px 24px;
-    }
-    
-    .btn {
+}
+
+.btn {
     position: absolute;
     left: 2rem;
     margin-top: 0.3rem;
-    }
-    
-    .theme-switch-wrapper {
+}
+
+.theme-switch-wrapper {
     display: flex;
     align-items: center;
-    }
-    
-    .theme-switch-wrapper em {
+}
+
+.theme-switch-wrapper em {
     margin-left: 10px;
     font-size: 1rem;
-    }
-    
-    .theme-switch {
+}
+
+.theme-switch {
     display: inline-block;
     height: 34px;
     position: relative;
     width: 60px;
-    }
-    
-    .theme-switch input {
+}
+
+.theme-switch input {
     display: none;
-    }
-    
-    .slider {
+}
+
+.slider {
     background-color: var(--togglebg);
     bottom: 0;
     cursor: pointer;
@@ -76,9 +76,9 @@
     right: 0;
     top: 0;
     transition: 0.4s;
-    }
-    
-    .slider:before {
+}
+
+.slider:before {
     background-color: var(--roundcolor);
     bottom: 4px;
     content: "";
@@ -87,29 +87,29 @@
     position: absolute;
     transition: 0.4s;
     width: 26px;
-    }
-    
-    input:checked + .slider {
+}
+
+input:checked + .slider {
     background-color: var(--toggleslider);
-    }
-    
-    input:checked + .slider:before {
+}
+
+input:checked + .slider:before {
     transform: translateX(26px);
-    }
-    
-    .slider.round {
+}
+
+.slider.round {
     border-radius: 34px;
-    }
-    
-    .slider.round:before {
+}
+
+.slider.round:before {
     border-radius: 50%;
-    }
-    
-    em {
+}
+
+em {
     color: var(--color);
-    }
-    
-    .container {
+}
+
+.container {
     width: 100%;
     max-width: 700px;
     margin: 0 auto;
@@ -118,53 +118,55 @@
     color: var(--color);
     margin: auto;
     padding-top: 4rem;
-    }
-    
-    .app-title {
+}
+
+.app-title {
     text-align: center;
     margin-bottom: 20px;
     font-size: 80px;
-    }
-    
-    svg {
+}
+
+svg {
     width: 64px;
     height: 64px;
-    }
-    
-    .todo-list {
+}
+
+.todo-list {
     list-style: none;
     margin-bottom: 20px;
-    }
-    
-    .todo-item {
+}
+
+.todo-item {
     margin-bottom: 10px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    }
-    
-    .todo-item span {
+    transition: background-color 0.3s ease;
+}
+
+.todo-item span {
     flex-grow: 1;
     margin-left: 10px;
     margin-right: 10px;
     font-size: 22px;
-    }
-    
-    .done span {
+}
+
+.done span {
     text-decoration: line-through;
     user-select: none;
-    }
-    
-    input[type="checkbox"] {
+}
+
+input[type="checkbox"] {
     display: none;
-    }
-    input:focus {
+}
+
+input:focus {
     outline: none;
     background-color: #d4e7d5;
-    }
-    
-    .tick {
+}
+
+.tick {
     width: 30px;
     height: 30px;
     border: 3px solid var(--color);
@@ -173,94 +175,98 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    }
-    
-    .tick::before {
+}
+
+.tick::before {
     content: "✔️";
     font-size: 20px;
     display: none;
-    }
-    
-    .done .tick::before {
+}
+
+.done .tick::before {
     display: inline;
-    }
-    
-    .delete-todo {
+}
+
+.delete-todo {
     border: none;
     background-color: transparent;
     outline: none;
     cursor: pointer;
-    }
-    
-    .delete-todo svg {
+}
+
+.delete-todo svg {
     width: 30px;
     height: 30px;
     pointer-events: none;
-    }
-    
-    form {
+}
+
+form {
     width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 2rem;
-    }
-    
-    input[type="text"] {
+}
+
+input[type="text"] {
     width: 100%;
     padding: 10px;
     border-radius: 4px;
     border: 3px solid #333;
-    }
-    
-    /* Add this below all the other styles */
-    
-    .empty-state {
+}
+
+/* Empty state when the todo list is empty */
+.empty-state {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     display: none;
-    }
-    
-    .checklist-icon {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.checklist-icon {
     margin-bottom: 20px;
-    }
-    
-    .empty-state__title,
-    .empty-state__description {
-    /* margin-bottom: 20px; */
+}
+
+.empty-state__title,
+.empty-state__description {
     font-size: 25px;
     text-align: center;
     margin: 2rem;
     width: 25rem;
-    }
-    
-    /* Add this below the other styles */
-    .todo-list:empty {
+}
+
+.todo-list:empty {
     display: none;
-    }
-    
-    .todo-list:empty + .empty-state {
+}
+
+.todo-list:empty + .empty-state {
     display: flex;
-    }
-    
-    @media (max-width: 608px) {
+    opacity: 1;
+}
+
+@media (max-width: 608px) {
     .container {
-    width: 90%;
-    margin: auto;
+        width: 90%;
+        margin: auto;
     }
+
     .app-title {
-    font-size: 3rem;
+        font-size: 3rem;
     }
+
     .empty-state__title,
     .empty-state__description {
-    font-size: 1.5rem;
-    width: 18rem;
+        font-size: 1.5rem;
+        width: 18rem;
     }
-    /*   .btn {
-    position: absolute;
-    right: -1rem;
-    } */
+
     em {
-    display: none;
+        display: none;
     }
-    }
+}
+
+/* Add focus outline for interactive elements */
+.todo-item:focus {
+    outline: 2px solid #ffcc00;
+}
